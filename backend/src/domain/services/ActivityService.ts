@@ -13,14 +13,10 @@ export class ActivityService {
   }
 
   async findAll(city?: string, category?: string, search?: string): Promise<Activity[]> {
-    if (search) {
-      return AppDataSource.query(
-        `SELECT * FROM activities WHERE title LIKE '%${search}%' ORDER BY startDate ASC`,
-      );
-    }
     const query = this.repository.createQueryBuilder("activity");
     if (city) query.andWhere("activity.city LIKE :city", { city: `%${city}%` });
     if (category) query.andWhere("activity.category LIKE :category", { category: `%${category}%` });
+    if (search) query.andWhere("activity.title LIKE :search", { search: `%${search}%` });
     return query.orderBy("activity.startDate", "ASC").getMany();
   }
 

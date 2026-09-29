@@ -31,7 +31,7 @@
                 <%= b.id %>
               </td>
               <td>
-                <%- b.user ? b.user.firstName + ' ' + b.user.lastName : '-' %>
+                <%= b.user ? b.user.firstName + ' ' + b.user.lastName : '-' %>
               </td>
               <td>
                 <%= b.activity ? b.activity.title : '-' %>

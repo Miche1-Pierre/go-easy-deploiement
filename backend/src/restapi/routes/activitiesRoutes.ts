@@ -14,7 +14,7 @@ import { UserRole } from "@domain/entities/enums";
 import { CreateActivityDTO } from "@restapi/dto/activity/CreateActivityDTO";
 import { UpdateActivityDTO } from "@restapi/dto/activity/UpdateActivityDTO";
 const router = Router();
-const admin = [authnMiddleware];
+const admin = [authnMiddleware, authzMiddleware(UserRole.ADMIN)];
 router.get(
   "/",
   asyncHandlerMiddleware((req, res) =>

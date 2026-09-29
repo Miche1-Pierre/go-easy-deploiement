@@ -20,7 +20,5 @@ export function errorHandler(
   }
 
   console.error("Erreur inattendue :", err);
-  const message = err instanceof Error ? err.message : String(err);
-  const stack = err instanceof Error ? err.stack : undefined;
-  res.status(500).json({ error: message, stack, success: false });
+  res.status(500).json({ error: "Erreur interne du serveur", success: false });
 }

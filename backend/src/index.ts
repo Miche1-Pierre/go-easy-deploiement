@@ -27,7 +27,7 @@ function createApp() {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  app.use(cors({ origin: "*", credentials: true }));
+  app.use(cors({ origin: env.corsOrigins, credentials: true }));
 
   app.use(
     session({

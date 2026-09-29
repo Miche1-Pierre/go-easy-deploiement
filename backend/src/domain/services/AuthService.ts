@@ -12,7 +12,6 @@ import { Repository } from "typeorm";
 export interface PublicUser {
   id: number;
   email: string;
-  password: string;
   firstName: string;
   lastName: string;
   role: UserRole;
@@ -26,8 +25,8 @@ export class AuthService {
   }
 
   private toPublicUser(user: User): PublicUser {
-    const { id, email, password, firstName, lastName, role } = user;
-    return { id, email, password, firstName, lastName, role };
+    const { id, email, firstName, lastName, role } = user;
+    return { id, email, firstName, lastName, role };
   }
 
   private signToken(user: User): string {
@@ -55,7 +54,7 @@ export class AuthService {
       password: passwordHash,
       firstName: dto.firstName,
       lastName: dto.lastName,
-      role: dto.role ?? UserRole.TOURIST,
+      role: UserRole.TOURIST,
     });
     await this.repository.save(user);
 
