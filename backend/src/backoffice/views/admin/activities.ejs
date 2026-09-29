@@ -1,0 +1,6 @@
+<%- include('_head', { page: 'activities' }) %>
+<div class="page-header"><h1>Activités touristiques</h1><a href="/admin/activities/new" class="btn btn-primary">+ Nouvelle activité</a></div>
+<% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+<table class="table"><thead><tr><th>Titre</th><th>Ville</th><th>Catégorie</th><th>Date</th><th>Places</th><th></th></tr></thead><tbody>
+<% activities.forEach(function(a) { %><tr><td><strong><%- a.title %></strong></td><td><%= a.city %></td><td><%= a.category %></td><td><%= new Date(a.startDate).toLocaleString('fr') %></td><td><%= a.capacity %></td><td class="actions"><a href="/admin/activities/<%= a.id %>/edit" class="btn btn-secondary">Modifier</a><form action="/admin/activities/<%= a.id %>/delete" method="post" style="display:inline" onsubmit="return confirm('Supprimer cette activité et ses réservations ?')"><button class="btn btn-danger">Supprimer</button></form></td></tr><% }) %>
+<% if (!activities.length) { %><tr><td colspan="6" class="muted" style="text-align:center;padding:24px">Aucune activité.</td></tr><% } %></tbody></table><%- include('_foot') %>

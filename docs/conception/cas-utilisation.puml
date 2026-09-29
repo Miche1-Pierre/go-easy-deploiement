@@ -1,0 +1,54 @@
+@startuml cas-utilisation
+
+left to right direction
+skinparam packageStyle rectangle
+
+actor Visiteur
+actor Client
+actor Administrateur
+
+Client --|> Visiteur
+
+rectangle "GoEasy" {
+  usecase "Consulter le catalogue d'activités" as UC_Catalogue
+  usecase "Rechercher par ville ou catégorie" as UC_Recherche
+  usecase "Consulter le détail d'une activité" as UC_DetailActivite
+  usecase "S'inscrire" as UC_Inscription
+  usecase "Se connecter" as UC_Connexion
+
+  usecase "Réserver une activité" as UC_Reserver
+  usecase "Consulter mes réservations" as UC_MesReservations
+  usecase "Annuler une réservation" as UC_AnnulerMaReservation
+  usecase "Consulter mon profil" as UC_Profil
+  usecase "Se déconnecter" as UC_Deconnexion
+
+  usecase "Se connecter au back-office" as UC_ConnexionAdmin
+  usecase "Se déconnecter du back-office" as UC_DeconnexionAdmin
+  usecase "Gérer les activités" as UC_GererActivites
+  usecase "Consulter toutes les réservations" as UC_ToutesReservations
+  usecase "Annuler n'importe quelle réservation" as UC_AnnulerReservation
+}
+
+Visiteur --> UC_Catalogue
+Visiteur --> UC_DetailActivite
+Visiteur --> UC_Inscription
+Visiteur --> UC_Connexion
+UC_Recherche .> UC_Catalogue : <<extend>>
+
+Client --> UC_Reserver
+Client --> UC_MesReservations
+Client --> UC_AnnulerMaReservation
+Client --> UC_Profil
+Client --> UC_Deconnexion
+
+Administrateur --> UC_ConnexionAdmin
+Administrateur --> UC_DeconnexionAdmin
+Administrateur --> UC_GererActivites
+Administrateur --> UC_ToutesReservations
+Administrateur --> UC_AnnulerReservation
+
+UC_Reserver .> UC_Connexion : <<include>>
+UC_MesReservations .> UC_Connexion : <<include>>
+UC_AnnulerMaReservation .> UC_Connexion : <<include>>
+
+@enduml

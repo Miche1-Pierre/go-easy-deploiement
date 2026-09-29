@@ -1,0 +1,39 @@
+name: go-easy
+services:
+  db:
+    restart: unless-stopped
+
+  backend:
+    image: ghcr.io/<votre-compte-github>/go-easy-backend:latest #ADAPTER UNIQUEMENT ICI
+    restart: unless-stopped
+    labels:
+      - "com.centurylabs.watchtower.enable=true"
+
+  front-office:
+    image: ghcr.io/<votre-compte-github>/go-easy-front-office:latest #ADAPTER UNIQUEMENT ICI
+    restart: unless-stopped
+    labels:
+      - "com.centurylabs.watchtower.enable=true"
+
+  nginx:
+    restart: unless-stopped
+
+  watchtower:
+    image: ghcr.io/nicholas-fedor/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    environment:
+      WATCHTOWER_LABEL_ENABLE: "true"
+      WATCHTOWER_CLEANUP: "true"
+      WATCHTOWER_POLL_INTERVAL: "60"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - go-easy.net
+
+volumes:
+  db_data:
+
+networks:
+  go-easy.net:
+    driver: bridge

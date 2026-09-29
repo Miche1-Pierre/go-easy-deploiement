@@ -1,0 +1,79 @@
+<%- include('_head', { page: 'bookings' }) %>
+
+  <div class="page-header">
+    <h1>Toutes les réservations</h1>
+  </div>
+
+  <% if (error) { %>
+    <div class="alert alert-error">
+      <%= error %>
+    </div>
+    <% } %>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Client</th>
+            <th>Activité</th>
+            <th>Ville</th>
+            <th>Date</th>
+            <th>Participants</th>
+            <th>Total</th>
+            <th>Statut</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% bookings.forEach(function(b) { %>
+            <tr>
+              <td>
+                <%= b.id %>
+              </td>
+              <td>
+                <%- b.user ? b.user.firstName + ' ' + b.user.lastName : '-' %>
+              </td>
+              <td>
+                <%= b.activity ? b.activity.title : '-' %>
+              </td>
+              <td>
+                <%= b.activity ? b.activity.city : '-' %>
+              </td>
+              <td>
+                <%= b.activity ? new Date(b.activity.startDate).toLocaleString("fr") : '-' %>
+              </td>
+              <td>
+                <%= b.participants %>
+              </td>
+              <td>
+                <%= Number(b.totalPrice).toFixed(2) %>€
+              </td>
+              <td>
+                <% if (b.status==='CONFIRMED' ) { %>
+                  <span class="badge badge-green">Confirmée</span>
+                  <% } else if (b.status==='CANCELLED' ) { %>
+                    <span class="badge badge-grey">Annulée</span>
+                    <% } else { %>
+                      <span class="badge">
+                        <%= b.status %>
+                      </span>
+                      <% } %>
+              </td>
+              <td>
+                <% if (b.status==='CONFIRMED' ) { %>
+                  <form action="/admin/bookings/<%= b.id %>/cancel" method="post" style="display:inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Annuler</button>
+                  </form>
+                  <% } %>
+              </td>
+            </tr>
+            <% }) %>
+              <% if (bookings.length===0) { %>
+                <tr>
+                  <td colspan="9" class="muted" style="text-align:center;padding:24px">Aucune réservation.</td>
+                </tr>
+                <% } %>
+        </tbody>
+      </table>
+
+      <%- include('_foot') %>

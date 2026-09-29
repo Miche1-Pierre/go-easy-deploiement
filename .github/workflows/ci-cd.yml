@@ -1,0 +1,94 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-backend:
+    name: Build & test backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - name: Tests unitaires (Jest)
+        run: npm test
+      - run: npm run build
+
+  build-front-office:
+    name: Build front-office
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: front-office
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: front-office/package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+  # Build & push des images vers GHCR. La VM ne reçoit jamais d'accès direct
+  # depuis GitHub Actions : c'est Watchtower, côté serveur, qui détecte et tire
+  # les nouvelles images (voir docker-compose.prod.yml).
+  docker:
+    name: Build & push image (${{ matrix.app }})
+    needs: [build-backend, build-front-office]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - app: backend
+            context: ./backend
+            image: go-easy-backend
+          - app: front-office
+            context: ./front-office
+            image: go-easy-front-office
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}
+          tags: |
+            type=raw,value=latest
+            type=sha,format=short
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          target: runtime
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app }}

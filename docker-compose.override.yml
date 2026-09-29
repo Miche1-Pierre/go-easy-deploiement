@@ -1,0 +1,49 @@
+name: go-easy
+services:
+  db:
+    ports:
+      - "3306:3306"
+
+  backend:
+    build:
+      context: ./backend
+      target: dev
+    develop:
+      watch:
+        - action: sync
+          path: ./backend/src
+          target: /app/src
+          initial_sync: true
+        - action: rebuild
+          path: ./backend/package.json
+    ports:
+      - "3000:3000"
+
+  front-office:
+    build:
+      context: ./front-office
+      target: dev
+    develop:
+      watch:
+        - action: sync
+          path: ./front-office/src
+          target: /app/src
+          initial_sync: true
+        - action: rebuild
+          path: ./front-office/package.json
+    ports:
+      - "81:80"
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - go-easy.net
+
+volumes:
+  db_data:
+
+networks:
+  go-easy.net:
+    driver: bridge

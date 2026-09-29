@@ -1,0 +1,15 @@
+meta {
+  name: All Bookings (Admin)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/bookings
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

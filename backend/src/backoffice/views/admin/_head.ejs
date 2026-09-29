@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoEasy | Back Office</title>
+  <link rel="stylesheet" href="/admin/style.css">
+</head>
+
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">GoEasy <span class="tag">Back Office</span></div>
+      <nav>
+        <a href="/admin/activities" class="<%= page === 'activities' ? 'active' : '' %>">Activités</a>
+        <a href="/admin/bookings" class="<%= page === 'bookings' ? 'active' : '' %>">Réservations</a>
+      </nav>
+      <div class="sidebar-footer">
+        <p class="muted">
+          <%= user.firstName %>
+            <%= user.lastName %>
+        </p>
+        <form action="/admin/logout" method="post">
+          <button class="link-btn">Déconnexion</button>
+        </form>
+      </div>
+    </aside>
+    <main>

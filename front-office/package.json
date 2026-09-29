@@ -1,0 +1,26 @@
+{
+  "name": "go-easy-front-office",
+  "version": "1.0.0",
+  "description": "GoEasy Front Office",
+  "author": "Alexandre Leroux (alex@shrp.dev)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5173",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.19.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^6.0.4",
+    "typescript": "^5.4.5",
+    "vite": "^8.1.5"
+  }
+}

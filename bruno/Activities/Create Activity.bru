@@ -1,0 +1,27 @@
+meta {
+  name: Create Activity
+  type: http
+  seq: 3
+}
+post {
+  url: {{baseUrl}}/api/activities
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{token}}
+}
+body:json {
+  {
+    "title": "Visite du centre historique",
+    "description": "Une visite guidée de deux heures.",
+    "city": "Nancy",
+    "category": "Patrimoine",
+    "meetingPoint": "Place Stanislas",
+    "startDate": "2027-08-01T10:00:00.000Z",
+    "durationMinutes": 120,
+    "pricePerPerson": 15,
+    "capacity": 12,
+    "imageUrl": "https://picsum.photos/seed/tour/900/500"
+  }
+}

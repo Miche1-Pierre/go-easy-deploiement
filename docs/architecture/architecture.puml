@@ -1,0 +1,52 @@
+@startuml architecture
+title StayEasy - Architecture de déploiement
+
+skinparam backgroundColor white
+skinparam componentStyle rectangle
+skinparam wrapWidth 200
+skinparam node {
+  BackgroundColor #F8F9FA
+  BorderColor #495057
+}
+skinparam database {
+  BackgroundColor #FFF3CD
+  BorderColor #856404
+}
+skinparam component {
+  BackgroundColor #E7F1FF
+  BorderColor #1864AB
+}
+
+actor "Client / Admin\n(navigateur)" as user
+
+node "Hôte Docker" {
+  node "docker compose : réseau go-easy.net" as network {
+
+    node "nginx\n(reverse proxy, :80)" as nginx
+
+    node "front-office\n(React / NGINX)" as front {
+      component "SPA CSR\nReact" as spa
+    }
+
+    node "backend\n(Node.js + Express + TypeORM, :3000)" as backend {
+      component "API REST\n/api" as api
+      component "Back office SSR\n/admin" as admin
+    }
+
+    database "db\n(MariaDB)" as db
+
+  }
+}
+
+user --> nginx : "HTTP :80"
+
+nginx --> spa : "/"
+nginx --> api : "/api"
+nginx --> admin : "/admin"
+
+spa ..> api : "fetch JSON"
+
+api --> db
+admin --> db
+
+@enduml

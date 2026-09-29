@@ -1,0 +1,15 @@
+meta {
+  name: Cancel Booking
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/api/bookings/1/cancel
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
