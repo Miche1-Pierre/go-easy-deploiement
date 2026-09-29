@@ -4,16 +4,16 @@ services:
     restart: unless-stopped
 
   backend:
-    image: ghcr.io/<votre-compte-github>/go-easy-backend:latest #ADAPTER UNIQUEMENT ICI
+    image: ghcr.io/miche1-pierre/go-easy-backend:latest #ADAPTER UNIQUEMENT ICI
     restart: unless-stopped
     labels:
-      - "com.centurylabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.enable=true"
 
   front-office:
-    image: ghcr.io/<votre-compte-github>/go-easy-front-office:latest #ADAPTER UNIQUEMENT ICI
+    image: ghcr.io/miche1-pierre/go-easy-front-office:latest #ADAPTER UNIQUEMENT ICI
     restart: unless-stopped
     labels:
-      - "com.centurylabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.enable=true"
 
   nginx:
     restart: unless-stopped
